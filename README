@@ -1,0 +1,8 @@
+1、安装frida：pip3 install frida
+2、安装frida-tool：pip3 install frida-tool
+3、下载frida_server for android: https://github.com/frida/frida/releases
+4、把frida_server推到手机上：adb push frida_server /data/local/tmp/
+5、chmod 777 /data/local/tmp/frida_server
+6、/data/local/tmp/frida_server
+7、在终端转发端口：adb forward tcp:27042 tcp:27042  adb forward tcp:27043 tcp:27043
+8、执行编写的hook的python脚本
