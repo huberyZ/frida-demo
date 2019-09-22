@@ -5,11 +5,13 @@ import sys
 javaFuncJsCode = """
 if(Java.available){
     Java.perform(function(){
-        var MainActivity = Java.use("com.test.myimei.MainActivity");
-        MainActivity.check.overload("int").implementation=function(math){
-            console.log("[javascript] check be called.");
-            send("check be called.");
-            return this.check(95);      
+        console.log("[javascript] check be called.");
+        var a = Java.use("com.ta.utdid2.device.a");
+        a.getUtdid.overload().implementation=function(){
+            send("c.getValue be called.");
+            var str = this.getUtdid();
+            send("getUtdid:" + str);
+            return str;
         }
     });
 }
@@ -37,13 +39,15 @@ var nativePointer = Module.findExportByName("libjniFunc.so", "Java_com_test_myim
 send("native func encrytion() pointers:" + nativePointer);
 Interceptor.attach(nativePointer, {
     onEnter: function(args) {
-        send("encrytion() args: " + args[0])
+//        send("encrytion() args: " + "len: " + parseInt(args[2]))
+        send("encrytion() args: " + Memory.readCString(args[0], parseInt(args[1])) + "len: " + parseInt(args[1]))
     },
     onLeave: function(retval) {
         send("encrytion result value:" + retval);
     }
 });
 """
+
 
 def on_message(message, data):
     if message['type'] == 'send':
@@ -61,6 +65,6 @@ def startHook(packageName, jsCode):
     sys.stdin.read()
 
 if __name__ == "__main__":
-#    startHook("com.test.myimei", javaFuncJsCode)
-    startHook("com.test.myimei", exportNativeFuncJsCode)
+    startHook("com.MobileTicket", javaFuncJsCode)
+#    startHook("com.test.myimei", exportNativeFuncJsCode)
    
